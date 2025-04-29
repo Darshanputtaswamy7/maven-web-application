@@ -27,9 +27,19 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 	</properties>
-
+ <repositories>
+    <repository>
+      <id>nexus</id>
+      <name>Nexus Local Repository</name>
+      <url>http://13.201.116.222:8082/darshan1/repository/Darshanlocal/</url>
+    </repository>
+ </repositories>
 	<dependencies>
-		
+		<dependency>
+  <groupId>com.mt</groupId>
+  <artifactId>mail</artifactId>
+  <version>1.0.0</version>
+</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
