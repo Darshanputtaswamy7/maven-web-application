@@ -31,7 +31,7 @@
     <repository>
       <id>nexus</id>
       <name>Nexus Local Repository</name>
-      <url>http://35.154.158.104:8082/darshan1/repository/Darshanlocal/</url>
+      <url>http://13.233.129.204:8081/repository/Darshanlocal/</url>
     </repository>
  </repositories>
 	<dependencies>
