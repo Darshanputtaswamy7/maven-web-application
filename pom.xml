@@ -114,7 +114,7 @@
 	</distributionManagement>
 	
 	<build>
-		<finalName>maven-web-application</finalName>
+		<finalName>maven-web-application1</finalName>
 		
 		<plugins>
 			<plugin>
