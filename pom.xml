@@ -34,13 +34,7 @@
       <url>http://172.31.45.214:8081/repository/Darshangroup/</url>
     </repository>
  </repositories>
-	<dependencies>
-		<dependency>
-  <groupId>com.mt</groupId>
-  <artifactId>mail</artifactId>
-  <version>1.0.0</version>
-</dependency>
-		
+	<dependencies>		
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
