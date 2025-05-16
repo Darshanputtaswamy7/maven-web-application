@@ -19,7 +19,7 @@ stage('DeploytoTomcat'){
     sh "scp -o StrictHostKeyChecking=no target/*.war ec2-user@172.31.15.177:/opt/apache-tomcat-9.0.104/webapps"
 }
 }
-}
+
 }
 catch (e) {
     // If there was an exception thrown, the build failed
