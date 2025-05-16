@@ -6,7 +6,7 @@ properties([
     pipelineTriggers([githubPush()])
   ])
     def mavenHome = tool name: 'maven 3.9.9'
-    stage('Checkoutcode'){git branch: 'development', url: 'https://github.com/Darshanputtaswamy8/maven-web-application.git'}
+    stage('Checkoutcode'){git branch: 'development', url: 'https://github.com/Darshanputtaswamy7/maven-web-application.git'}
 /*stage('Build'){
 sh "${mavenHome}/bin/mvn clean package sonar:sonar deploy"
 }
