@@ -12,9 +12,9 @@ sh "${mavenHome}/bin/mvn clean package sonar:sonar deploy"
 stage('Build'){
 sh "${mavenHome}/bin/mvn clean package sonar:sonar deploy"
 }
-stage('DeploytoTomcat'){
-    sshagent(['a12a3370-c50d-4c33-8392-9d7e8623956c']){
-    sh "scp -o StrictHostKeyChecking=no target/*.war ec2-user@172.31.15.177:/opt/apache-tomcat-9.0.104/webapps"
+stage('Create Directory') {
+    sshagent(['a12a3370-c50d-4c33-8392-9d7e8623956c']) {
+        sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.15.177 "mkdir -p /home/ec2-user/darshan"'
 }
 }
 }
