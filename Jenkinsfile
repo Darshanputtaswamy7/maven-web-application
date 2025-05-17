@@ -35,12 +35,6 @@ sh "mvn clean package "}//package
 }//steps
 }//stage
 
-stage('Deploy to Tomcat'){
-steps{
-deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '2fd3bff6-378f-4791-9a7e-0cfd6f63fc84', path: '', url: 'http://3.109.59.33:8080/')], contextPath: null, war: '**/*.war'
-}//deploy
-}//tomcat
-
 }//stages
 
 post {
