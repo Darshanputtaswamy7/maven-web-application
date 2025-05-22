@@ -23,6 +23,7 @@ node {
    sh  "scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/piprlinecriptedway/target/maven-web-application.war ec2-user@172.31.15.177:/opt/apache-tomcat-9.0.104/webapps" 
 }//ssh
     }//tomcat
+	}
 catch (e)
 {
 currentBuild.result="Failed"
