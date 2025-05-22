@@ -1,5 +1,9 @@
 node {
     def mavenHome = tool name:'maven 3.9.9'
+	triggers {
+  githubPush()
+}
+
     stage('checkout'){
      git 'https://github.com/Darshanputtaswamy7/maven-web-application.git'   
     }//checkout
