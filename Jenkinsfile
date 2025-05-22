@@ -1,7 +1,6 @@
 node {
     def mavenHome = tool name:'maven 3.9.9'
-	triggers {
-  githubPush()
+	properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5')), pipelineTriggers([githubPush()])])
 }
 
     stage('checkout'){
