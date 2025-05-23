@@ -5,7 +5,7 @@ node {
 	SendSlackNotifications('STARTED')
 	def mavenHome = tool name:'maven 3.9.9'
 	properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5')), pipelineTriggers([githubPush()])])
-
+//
     stage('checkout'){
      git 'https://github.com/Darshanputtaswamy7/maven-web-application.git'   
     }//checkout
