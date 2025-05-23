@@ -21,7 +21,7 @@
                 <spring.version>5.1.2.RELEASE</spring.version>
                 <junit.version>4.11</junit.version>
                 <log4j.version>1.2.17</log4j.version>
-                <sonar.host.url>http://172.31.3.54:9000/</sonar.host.url>
+                <sonar.host.url>http://172.31.2.17:9000/</sonar.host.url>
                 <sonar.login>squ_4cc970e0114ca1317b1aefa8c67774304bba122e</sonar.login>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -31,7 +31,7 @@
         <repositories>
                 <repository>
                         <id>nexus</id>
-                        <url>http://172.31.45.214:8081/repository/Darshanlocal/</url>
+                        <url>http://172.31.2.17:8081/repository/Darshanlocal/</url>
                 </repository>
         </repositories>
 
@@ -109,13 +109,13 @@
             <repository>
               <id>nexus</id>
               <name>Mithun Technologies Releases Nexus Repository</name>
-              <url>http://172.31.45.214:8081/repository/Darshanrelease/</url>
+              <url>http://172.31.2.17:8081/repository/Darshanrelease/</url>
             </repository>
 
             <snapshotRepository>
               <id>nexus</id>
               <name>Mithun Technologies Snapshot Nexus Repository </name>
-              <url>http://172.31.45.214:8081/repository/Darshansnapshot</url>
+              <url>http://172.31.2.17:8081/repository/Darshansnapshot</url>
             </snapshotRepository>
 
         </distributionManagement>
