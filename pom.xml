@@ -37,11 +37,7 @@
 
         <dependencies>
 
-                <dependency>
-  <groupId>com.mt</groupId>
-  <artifactId>mail</artifactId>
-  <version>1.0.0</version>
-</dependency>
+    
                 <dependency>
                         <groupId>org.json</groupId>
                         <artifactId>json</artifactId>
