@@ -7,7 +7,7 @@ tools {
 
 triggers {
   githubPush()
-}
+}//
 
 options {
   buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '3', numToKeepStr: '3')
