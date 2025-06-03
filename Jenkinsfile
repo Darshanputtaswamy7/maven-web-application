@@ -27,7 +27,7 @@ sh "mvn clean package"
 }
 
 
-stage('build'){
+stage('downstream'){
 steps{
 build job: 'QA'
 }
