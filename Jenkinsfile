@@ -1,44 +1,30 @@
-pipeline {
-
-agent any
-tools {
-  maven 'maven 3.9.9'
-}//tools
-
-triggers {
-  githubPush()
-}//
-
-options {
-  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '3', numToKeepStr: '3')
+node {
+    try{
+	SendSlackNotifications('STARTED')
+	def mavenHome = tool name: 'maven 3.9.9'
+properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '3', numToKeepStr: '3')), pipelineTriggers([pollSCM('H/10 * * * *')])])
+deleteDir()    
+	stage('checkout'){
+        git 'https://github.com/Darshanputtaswamy7/maven-web-application.git'
+    }//checkout
+    
+    stage('build'){
+        sh "${mavenHome}/bin/mvn clean package sonar:sonar deploy"
+    }//build
+	
+	stage('deploy'){
+        deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '225886a6-10e5-4487-a1ca-560c2927d323', path: '', url: 'http://13.204.69.235:8080/')], contextPath: null, war: '**/*.war'
+    }
+	}//try
+catch (e)
+{
+currentBuild.result="Failed"
+throw e 
 }
-stages{
-stage('checkout'){
-steps{
-     SendSlackNotifications('STARTED')  
-git 'https://github.com/Darshanputtaswamy7/maven-web-application.git'
+finally{
+SendSlackNotifications(currentBuild.result)	
 }
-}
-
-stage('build'){
-steps{
-sh "mvn clean package"
-}
-}
-}//stages
-post {
-  success {
-	//deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd032a93b-3330-4e45-8300-b57f69dce8b4', path: '', url: 'http://172.31.14.242:8080/')], contextPath: null, war: '**/*.war'
-     SendSlackNotifications(currentBuild.result)  
-    // One or more stepss need to be included within each condition's block.
-  }//success
-  failure {
-       SendSlackNotifications(currentBuild.result)
-    // One or more stepss need to be included within each condition's block.
-  }//failure
-}//post
-
-}//pipeline
+}//node
 
 def SendSlackNotifications(String buildStatus = 'STARTED') {
   // build status of null means successful
@@ -65,3 +51,6 @@ def SendSlackNotifications(String buildStatus = 'STARTED') {
   // Send notifications
   slackSend (color: colorCode, message: summary)
 }
+	
+
+
