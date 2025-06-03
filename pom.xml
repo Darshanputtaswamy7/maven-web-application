@@ -1,173 +1,76 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-        <modelVersion>4.0.0</modelVersion>
+pipeline {
 
-        <groupId>com.mt</groupId>
-        <artifactId>maven-web-application</artifactId>
-        <packaging>war</packaging>
-        <version>1.0.1-SNAPSHOT</version>
+agent any
+tools {
+  maven 'maven 3.9.9'
+}//tools
 
-        <name>maven-web-application</name>
+triggers {
+  githubPush()
+}//
 
-        <description>Maven Web Project for Java Project</description>
+options {
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '3', numToKeepStr: '3')
+}
+stages{
+stage('checkout'){
+steps{
+     SendSlackNotifications('STARTED')  
+git 'https://github.com/Darshanputtaswamy7/maven-web-application.git'
+}
+}
 
-        <organization>
-                <name>Mithun Technologies</name>
-                <url>http://mithuntechnologies.com/</url>
-        </organization>
+stage('build'){
+steps{
+sh "mvn clean package"
+}
+}
+}//stages
 
-        <properties>
-                <jdk.version>1.8</jdk.version>
-                <spring.version>5.1.2.RELEASE</spring.version>
-                <junit.version>4.11</junit.version>
-                <log4j.version>1.2.17</log4j.version>
-                <sonar.host.url>http://172.31.6.15:9000/</sonar.host.url>
-                <sonar.login>squ_4e17d84cdabe7a944947ca7728159e6c8ecd45e1</sonar.login>
-                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        </properties>
-
-        <repositories>
-                <repository>
-                        <id>nexus</id>
-                        <url>http://172.31.10.198:8081/repository/Darshanlocal/</url>
-                </repository>
-        </repositories>
-
-        <dependencies>
-
-                <dependency>
-  <groupId>com.mt</groupId>
-  <artifactId>mail</artifactId>
-  <version>1.0.0</version>
-</dependency>
+stage('build'){
+steps{
+build job: 'QA'
+}
+}
+}//stages
 
 
-                <dependency>
-                        <groupId>org.json</groupId>
-                        <artifactId>json</artifactId>
-                        <version>20160212</version>
-                </dependency>
+post {
+  success {
+	//deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd032a93b-3330-4e45-8300-b57f69dce8b4', path: '', url: 'http://172.31.14.242:8080/')], contextPath: null, war: '**/*.war'
+     SendSlackNotifications(currentBuild.result)  
+    
+  }//success
+  failure {
+       SendSlackNotifications(currentBuild.result)
+  
+  }//failure
+}//post
 
-                <!-- test dependencies -->
-                <dependency>
-                        <groupId>junit</groupId>
-                        <artifactId>junit</artifactId>
-                        <version>3.8.1</version>
-                        <scope>test</scope>
-                </dependency>
+}//pipeline
 
-                <dependency>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>javax.servlet-api</artifactId>
-                        <version>3.1.0</version>
-                        <scope>provided</scope>
-                </dependency>
+def SendSlackNotifications(String buildStatus = 'STARTED') {
+  // build status of null means successful
+  buildStatus =  buildStatus ?: 'SUCCESS'
 
-                <dependency>
-                        <groupId>org.mockito</groupId>
-                        <artifactId>mockito-core</artifactId>
-                        <version>1.9.5</version>
-                        <scope>test</scope>
-                </dependency>
+// Default values
+  def colorName = 'RED'
+  def colorCode = '#FF0000'
+  def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+  def summary = "${subject} (${env.BUILD_URL})"
 
-                <!-- compile dependencies -->
+  // Override default values based on build status
+  if (buildStatus == 'STARTED') {
+    color = 'YELLOW'
+    colorCode = '#FFFF00'
+  } else if (buildStatus == 'SUCCESS') {
+    color = 'GREEN'
+    colorCode = '#00FF00'
+  } else {
+    color = 'RED'
+    colorCode = '#FF0000'
+  }
 
-                <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-core</artifactId>
-                        <version>${spring.version}</version>
-                </dependency>
-                <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${spring.version}</version>
-                </dependency>
-                <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-webmvc</artifactId>
-                        <version>${spring.version}</version>
-                </dependency>
-                <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-context</artifactId>
-                        <version>${spring.version}</version>
-                </dependency>
-
-                <!-- provided dependencies -->
-
-                <dependency>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>javax.servlet-api</artifactId>
-                        <version>3.1.0</version>
-                        <scope>provided</scope>
-                </dependency>
-
-        </dependencies>
-
-        <distributionManagement>
-
-            <repository>
-              <id>nexus</id>
-              <name>Mithun Technologies Releases Nexus Repository</name>
-              <url>http://172.31.10.198:8081/repository/Darshanrelease/</url>
-            </repository>
-
-            <snapshotRepository>
-              <id>nexus</id>
-              <name>Mithun Technologies Snapshot Nexus Repository </name>
-              <url>http://172.31.10.198:8081/repository/Darshansnapshot</url>
-            </snapshotRepository>
-
-        </distributionManagement>
-
-        <build>
-                <finalName>maven-web-application</finalName>
-
-                <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-war-plugin</artifactId>
-                            <version>3.3.2</version>
-                        </plugin>
-                        <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-compiler-plugin</artifactId>
-                                <version>3.3</version>
-                                <configuration>
-                                        <source>${jdk.version}</source>
-                                        <target>${jdk.version}</target>
-                                </configuration>
-                        </plugin>
-
-                        <plugin>
-                                <groupId>org.eclipse.jetty</groupId>
-                                <artifactId>jetty-maven-plugin</artifactId>
-                                <version>9.2.11.v20150529</version>
-                                <configuration>
-                                        <scanIntervalSeconds>10</scanIntervalSeconds>
-                                        <webApp>
-                                                <contextPath>/maven-web-application</contextPath>
-                                        </webApp>
-                                </configuration>
-                        </plugin>
-
-                        <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-eclipse-plugin</artifactId>
-                                <version>2.9</version>
-                                <configuration>
-                                        <downloadSources>true</downloadSources>
-                                        <downloadJavadocs>true</downloadJavadocs>
-                                        <wtpversion>2.0</wtpversion>
-                                        <wtpContextName>maven-web-application</wtpContextName>
-                                </configuration>
-                        </plugin>
-
-</plugins>
-        </build>
-
-
-</project>
-
+  // Send notifications
+  slackSend (color: colorCode, message: summary)
+}
