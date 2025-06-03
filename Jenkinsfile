@@ -25,16 +25,24 @@ steps{
 sh "mvn clean package"
 }
 }
+
+
+stage('build'){
+steps{
+build job: 'QA'
+}
+}
+
 }//stages
 post {
   success {
 	//deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd032a93b-3330-4e45-8300-b57f69dce8b4', path: '', url: 'http://172.31.14.242:8080/')], contextPath: null, war: '**/*.war'
      SendSlackNotifications(currentBuild.result)  
-    // One or more stepss need to be included within each condition's block.
+    
   }//success
   failure {
        SendSlackNotifications(currentBuild.result)
-    // One or more stepss need to be included within each condition's block.
+  
   }//failure
 }//post
 
