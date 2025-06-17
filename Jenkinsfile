@@ -4,7 +4,8 @@ pipeline {
 	tools {
   maven 'maven 3.9.10'
 }
-options {
+//
+	options {
 timestamps()
   buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
 }
