@@ -13,7 +13,7 @@ triggers {
 }
 parameters {
   choice choices: ['master', 'development', 'QA'], description: 'Branches', name: 'BranchName'
-}
+}//
 
 
 stages {
