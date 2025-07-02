@@ -21,8 +21,8 @@
                 <spring.version>5.1.2.RELEASE</spring.version>
                 <junit.version>4.11</junit.version>
                 <log4j.version>1.2.17</log4j.version>
-                <sonar.host.url>http://172.31.6.15:9000/</sonar.host.url>
-                <sonar.login>squ_04700c7bc05bd0d202e14019ca787fa9ee4b3970</sonar.login>
+                <sonar.host.url>http://172.31.45.81:9000/</sonar.host.url>
+                <sonar.login>squ_6c831fbf9715cdc89536e414fcd7531855fe34aa</sonar.login>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -31,13 +31,13 @@
         <repositories>
                 <repository>
                         <id>nexus</id>
-                        <url>http://172.31.10.198:8081/repository/Darshanlocal/</url>
+                        <url>http://172.31.37.100:8081/repository/Darshanlocal/</url>
                 </repository>
         </repositories>
 
         <dependencies>
 
-               <dependency>
+              <dependency>
   <groupId>com.mt</groupId>
   <artifactId>mail</artifactId>
   <version>1.0.0</version>
@@ -111,13 +111,13 @@
             <repository>
               <id>nexus</id>
               <name>Mithun Technologies Releases Nexus Repository</name>
-              <url>http://172.31.10.198:8081/repository/Darshanrelease/</url>
+              <url>http://172.31.37.100:8081/repository/Darshanrelease/</url>
             </repository>
 
             <snapshotRepository>
               <id>nexus</id>
               <name>Mithun Technologies Snapshot Nexus Repository </name>
-              <url>http://172.31.10.198:8081/repository/Darshansnapshot</url>
+              <url>http://172.31.37.100:8081/repository/Darshansnapshot</url>
             </snapshotRepository>
 
         </distributionManagement>
@@ -170,4 +170,3 @@
 
 
 </project>
-
