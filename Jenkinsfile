@@ -1,39 +1,49 @@
-timestamps {
+pipeline {
+
+    agent any
     
-    node {
+    tools {
+  maven 'Maven 3.9.10'
+}
 
-try {
+options {
+  timestamps()
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3')
+}
 
-    def mvnhome = tool name: 'Maven 3.9.10', type: 'maven'
-    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3')), pipelineTriggers([githubPush()])])
-    //buildName 'Darshan- ${env.BUILD_DISPLAY_NAME}'
+triggers {
+  githubPush()
+  pollSCM '*/59 * * * *'
+}
+
+stages {
+
+stage('checkout') {
+  steps {
     buildName "Darshan- ${env.BUILD_NUMBER}"
-    stage('Checkout') {
-        slackSend color: 'FFFF00', message: "${env.JOB_NAME} -  #${env.BUILD_DISPLAY_NAME} started by ${currentBuild.getBuildCauses()[0].userId} <${env.BUILD_URL}|Open> "
-        git 'https://github.com/Darshanputtaswamy7/maven-web-application.git'
-    }//checkout
+    slackSend color: 'FFFF00', message: "${env.JOB_NAME} -  #${env.BUILD_DISPLAY_NAME} started by ${currentBuild.getBuildCauses()[0].userId} <${env.BUILD_URL}|Open> "
+    git branch: 'master', credentialsId: '7c90dc78-e088-4fd2-b6eb-7960981444fe', url: 'https://github.com/Darshanputtaswamy7/maven-web-application.git'
+      }
+}
+stage('build') {
+  steps {
+    sh 'mvn clean test package'
+  }
+}
 
-    stage('Build') {
-        sh "${mvnhome}/bin/mvn clean test package"
-    }//build
+}
 
-}//try
-
-catch (e) {
-    currentBuild.result = 'FAILURE'
+post {
+  success {
+    slackSend color: '00FF00', message: "${env.JOB_NAME} -  #${env.BUILD_DISPLAY_NAME} SUCCESS <${env.BUILD_URL}|Open> "
+            deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'ebacaee9-4c9b-4ecf-80a3-5a21db047e3a', path: '', url: 'http://13.232.34.102:8080/')], contextPath: null, war: '**/*.war'
+    cleanWs()
+    
+  }
+  failure {
     slackSend color: 'FF0000', message: "${env.JOB_NAME} -  #${env.BUILD_DISPLAY_NAME} failed <${env.BUILD_URL}|Open> "
-    throw e
-}//catch
- finally {
-     if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-        slackSend color: '00FF00', message: "${env.JOB_NAME} -  #${env.BUILD_DISPLAY_NAME} SUCCESS <${env.BUILD_URL}|Open> "
-        deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'ebacaee9-4c9b-4ecf-80a3-5a21db047e3a', path: '', url: 'http://13.232.34.102:8080/')], contextPath: null, war: '**/*.war'
-        cleanWs()
-     }//if
+          }
+}
 
+}
 
-}//finally
-
-}//node
-
-}//timestamps
