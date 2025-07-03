@@ -7,7 +7,7 @@ pipeline {
 	options {
 timestamps()
   buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
-}
+}//
 triggers {
   githubPush()
 }
